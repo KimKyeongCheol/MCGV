@@ -1,0 +1,261 @@
+
+//공통 파라미터
+var cgvCode = ""; //영화고유코드
+var theaterCd = ""; //극장코드
+var theaterNm = ""; //극장명
+var ratingCd = ""; //상영관코드
+var playYMD = ""; //상영날짜
+var movieIdx = ""; //영화코드
+var movieName = ""; //영화명
+var isNormal = "Y"; //일반관,특별관 여부
+var chk = "0"; //통계코드
+
+var currentSelectBoxTheaterId = ""; //현재 선택된 지역별 극장 ID
+var currentSelectBoxSpecialTheaterId = ""; //현재 선택된 특별관 극장 ID
+var currentSelectBoxDateId = ""; //현재 선택된 날짜 ID
+var latitude = ""; //위도
+var longitude = ""; //경도
+var ThumbnailImage = ""; //썸네일이미지
+var CDNUrl = 'http://img.cgv.co.kr/WebApp'; //이미지서버 루트경로
+var MovieIdx = "79890"
+var strSMType = "";
+
+var theaterStep = "-1";
+
+//페이지 로딩
+oLoading = new jindo.m.Loading("divLoading", {
+bActivationOnload: true,
+nWidth: 16,
+nHeight: 16,
+sDefaultForeground: "black",
+sDefaultBackground: "transparent",
+sLoadingText: "",
+bUseFoggy: false,
+sFoggyColor: "gray",
+nFoggyOpacity: 0.3
+});
+
+//영화 리스트 호출
+function select_MovieList() {
+oLoading.show();
+tabControl("N", "N", "N", "N");
+tabImageControl("on", "off", "off", "off");
+hrefInit();
+cgvCode = ""; //영화고유코드 초기화
+theaterCd = ""; //극장코드 초기화
+theaterNm = ""; //극장명 초기화
+playYMD = ""; //날짜 초기화
+sAjaxUrl = "cont/ajaxMovieList.aspx";
+var woAjax = $Ajax(sAjaxUrl, {
+type: 'xhr',
+onload: function (res) {
+try {
+if (res.status() == 200) {
+$Element("dataWrap").html(res.text()); //공통 페이지 영역에 데이터 삽입
+//상단 탭 설정 - 영화,극장,날짜
+$Element("strTheaterli").prependTo("strTotalul");
+$Element("strMovieli").prependTo("strTotalul");
+chk = "0";
+fnSendGALog("0", "빠른예매/영화리스트", "", "", "");
+} else {
+alert('데이터를 불러오는데 실패했습니다.\n잠시 후에 다시 이용해 주세요.');
+window.location.reload();
+}
+oLoading.hide();
+} catch (e) {
+alert('데이터를 불러오는데 실패했습니다.\n잠시 후에 다시 이용해 주세요.');
+window.location.reload();
+}
+},
+onerror: function (res) {
+alert('데이터를 불러오는데 실패했습니다.\n잠시 후에 다시 이용해 주세요.');
+oLoading.hide();
+window.location.reload();
+}
+});
+
+// ajax 페이지 호출
+woAjax.request({
+MovieIdx: encodeURIComponent(cgv_encrypt(MovieIdx))
+, cgvCode: encodeURIComponent(cgv_encrypt(cgvCode))
+, theaterCd: encodeURIComponent(cgv_encrypt(theaterCd))
+, ratingCd: encodeURIComponent(cgv_encrypt(ratingCd))
+, playYMD: encodeURIComponent(cgv_encrypt(playYMD))
+, isWhat: encodeURIComponent(cgv_encrypt("M"))
+, isNormal: encodeURIComponent(cgv_encrypt("Y"))
+, latitude: encodeURIComponent(cgv_encrypt(latitude))
+, longitude: encodeURIComponent(cgv_encrypt(longitude))
+, selectType: encodeURIComponent(cgv_encrypt("FirstDateSelect"))
+});
+}
+
+//날짜 리스트 호출
+function select_DateList() {
+oLoading.show();
+tabControl("N", "N", "N", "N");
+tabImageControl("off", "off", "on", "off");
+hrefInit();
+cgvCode = ""; //영화고유코드 초기화
+theaterCd = ""; //극장코드 초기화
+theaterNm = ""; //극장명 초기화
+playYMD = ""; //날짜 초기화
+sAjaxUrl = "cont/ajaxDateList.aspx";
+var woAjax = $Ajax(sAjaxUrl, {
+type: 'xhr',
+onload: function (res) {
+try {
+if (res.status() == 200) {
+$Element("dataWrap").html(res.text()); //공통 페이지 영역에 데이터 삽입
+currentSelectBoxDateId = $Element("selectDate").attr("value"); //선택한 날짜의 selectbox ID값 저장
+updateDate(document.getElementById("selectDate"));
+//상단 탭 설정 - 날짜,영화,극장
+$Element("strMovieli").prependTo("strTotalul");
+$Element("strDateli").prependTo("strTotalul");
+chk = "2";
+fnSendGALog("0", "빠른예매/날짜시간선택", "", "", "");
+} else {
+alert('데이터를 불러오는데 실패했습니다.\n잠시 후에 다시 이용해 주세요.');
+window.location.reload();
+}
+oLoading.hide();
+} catch (e) {
+alert('데이터를 불러오는데 실패했습니다.\n잠시 후에 다시 이용해 주세요.');
+window.location.reload();
+}
+},
+onerror: function (res) {
+alert('데이터를 불러오는데 실패했습니다.\n잠시 후에 다시 이용해 주세요.');
+oLoading.hide();
+window.location.reload();
+}
+});
+// ajax 페이지 호출
+woAjax.request({
+cgvCode: encodeURIComponent(cgv_encrypt(cgvCode))
+, theaterCd: encodeURIComponent(cgv_encrypt(theaterCd))
+, ratingCd: encodeURIComponent(cgv_encrypt(ratingCd))
+, playYMD: encodeURIComponent(cgv_encrypt(playYMD))
+, isWhat: encodeURIComponent(cgv_encrypt("S"))
+, isNormal: encodeURIComponent(cgv_encrypt("Y"))
+, latitude: encodeURIComponent(cgv_encrypt(latitude))
+, longitude: encodeURIComponent(cgv_encrypt(longitude))
+, selectType: encodeURIComponent(cgv_encrypt("FirstDateSelect"))
+});
+}
+
+//극장 리스트 호출
+function select_TheaterList() {
+theaterStep = "0";
+oLoading.show();
+tabControl("N", "N", "N", "N");
+tabImageControl("off", "on", "off", "off");
+hrefInit();
+cgvCode = ""; //영화고유코드 초기화
+theaterCd = ""; //극장코드 초기화
+theaterNm = ""; //극장명 초기화
+playYMD = ""; //날짜 초기화
+sAjaxUrl = "cont/ajaxTheaterList.aspx";
+var woAjax = $Ajax(sAjaxUrl, {
+type: 'xhr',
+onload: function (res) {
+try {
+if (res.status() == 200) {
+$Element("dataWrap").html(res.text()); //공통 페이지 영역에 데이터 삽입
+currentSelectBoxTheaterId = $Element("topSelectTheater").attr("value"); //선택한 지역의 selectbox ID값 저장
+currentSelectBoxSpecialTheaterId = $Element("topSelectSpecialTheater").attr("value"); //선택한 특별관의 selectbox ID값 저장
+//상단 탭 설정 - 극장,영화,날짜
+$Element("strMovieli").prependTo("strTotalul");
+$Element("strTheaterli").prependTo("strTotalul");
+chk = "1";
+fnSendGALog("0", "빠른예매/극장리스트", "", "", "");
+} else {
+alert('데이터를 불러오는데 실패했습니다.\n잠시 후에 다시 이용해 주세요.');
+window.location.reload();
+}
+oLoading.hide();
+} catch (e) {
+alert('데이터를 불러오는데 실패했습니다.\n잠시 후에 다시 이용해 주세요.');
+window.location.reload();
+}
+},
+onerror: function (res) {
+alert('데이터를 불러오는데 실패했습니다.\n잠시 후에 다시 이용해 주세요.');
+oLoading.hide();
+window.location.reload();
+}
+});
+// ajax 페이지 호출
+woAjax.request({
+cgvCode: encodeURIComponent(cgv_encrypt(cgvCode))
+, theaterCd: encodeURIComponent(cgv_encrypt(theaterCd))
+, ratingCd: encodeURIComponent(cgv_encrypt(ratingCd))
+, playYMD: encodeURIComponent(cgv_encrypt(playYMD))
+, isWhat: encodeURIComponent(cgv_encrypt("T"))
+, isNormal: encodeURIComponent(cgv_encrypt("Y"))
+, latitude: encodeURIComponent(cgv_encrypt(latitude))
+, longitude: encodeURIComponent(cgv_encrypt(longitude))
+, selectType: ""
+});
+}
+
+function GetRatingCd(cd)
+{
+if (cd == '230') {
+return '03';
+}
+else if (cd == '231') {
+return '02';
+}
+else if (cd == '232') {
+return '01';
+}
+else if (cd == '233') {
+return '04';
+}
+else if (cd == '919') {
+return '99';
+}
+}
+
+function GetRatingNm(cd) {
+if (cd == '230') {
+return '12세이상관람가';
+}
+else if (cd == '231') {
+return '15세이상관람가';
+}
+else if (cd == '232') {
+return '청소년관람불가';
+}
+else if (cd == '233') {
+return '전체관람가';
+}
+else if (cd == '919') {
+return '미정';
+}
+}
+
+function checkSeat(cgvCodeData, movieIdxData, ThumbnailImageData, ratingCd, funcIndex, movieNameData) {
+oLoading.show();
+sAjaxUrl = "cont/ajaxCheckAbleSeat.aspx";
+var woAjax = $Ajax(sAjaxUrl, {
+type: 'xhr',
+onload: function (res) {
+try {
+if (res.status() == 200) {
+var r = res.text().split("|");
+var resultCd = r[0];
+var resultMsg = r[1];
+var ableSeatYn = r[2];
+var msg = r[3];
+oLoading.hide();
+if (resultCd == "00000") {
+if (ableSeatYn == "Y") {
+if (funcIndex == 1) {
+select_Movie_TheaterList_After(cgvCodeData, movieIdxData, ThumbnailImageData, movieNameData);
+} else if (funcIndex == 2) {
+select_Theater_Movie_DateList_After(cgvCodeData, movieIdxData, ThumbnailImageData, movieNameData);
+} else if (funcIndex == 3) {
+s…
+
+<input placeholder="">

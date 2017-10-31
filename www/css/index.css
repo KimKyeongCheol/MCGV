@@ -1,0 +1,717 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+/*
+* {
+    -webkit-tap-highlight-color: rgba(0,0,0,0); !* make transparent link selection, adjust last value opacity 0 to 1.0 *!
+}
+*/
+ul,li{list-style:none;float: left}
+*{margin:0; padding:0; letter-spacing:-0.5px; line-height:100%; font-family:Helvetica;}
+
+
+body {
+    -webkit-touch-callout: none;                /* prevent callout to copy image, etc when tap to hold */
+    -webkit-text-size-adjust: none;             /* prevent webkit from resizing text to fit */
+    -webkit-user-select: none;                  /* prevent copy paste, to allow, change 'none' to 'text' */
+    background-color:#E4E4E4;
+    background-image:linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
+    background-image:-webkit-linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
+    background-image:-ms-linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
+    background-image:-webkit-gradient(
+        linear,
+        left top,
+        left bottom,
+        color-stop(0, #A7A7A7),
+        color-stop(0.51, #E4E4E4)
+    );
+    background-attachment:fixed;
+    font-family:'HelveticaNeue-Light', 'HelveticaNeue', Helvetica, Arial, sans-serif;
+    font-size:12px;
+    height:100%;
+    margin:0px;
+    padding:0px;
+    text-transform:uppercase;
+    width:100%;
+}
+
+/* Portrait layout (default) */
+.app {
+    background:url(../img/logo.png) no-repeat center top; /* 170px x 200px */
+    position:absolute;             /* position in the center of the screen */
+    left:50%;
+    top:50%;
+    height:50px;                   /* text area height */
+    width:225px;                   /* text area width */
+    text-align:center;
+    padding:180px 0px 0px 0px;     /* image height is 200px (bottom 20px are overlapped with text) */
+    margin:-115px 0px 0px -112px;  /* offset vertical: half of image height and text area height */
+                                   /* offset horizontal: half of text area width */
+}
+
+/* Landscape layout (with min-width) */
+@media screen and (min-aspect-ratio: 1/1) and (min-width:400px) {
+    .app {
+        background-position:left center;
+        padding:75px 0px 75px 170px;  /* padding-top + padding-bottom + text area = image height */
+        margin:-90px 0px 0px -198px;  /* offset vertical: half of image height */
+                                      /* offset horizontal: half of image width and text area width */
+    }
+}
+
+h1 {
+    font-size:24px;
+    font-weight:normal;
+    margin:0px;
+    overflow:visible;
+    padding:0px;
+    text-align:center;
+}
+
+.event {
+    border-radius:4px;
+    -webkit-border-radius:4px;
+    color:#FFFFFF;
+    font-size:12px;
+    margin:0px 30px;
+    padding:2px 0px;
+}
+
+.event.listening {
+    background-color:#333333;
+    display:block;
+}
+
+.event.received {
+    background-color:#4B946A;
+    display:none;
+}
+
+@keyframes fade {
+    from { opacity: 1.0; }
+    50% { opacity: 0.4; }
+    to { opacity: 1.0; }
+}
+
+@-webkit-keyframes fade {
+    from { opacity: 1.0; }
+    50% { opacity: 0.4; }
+    to { opacity: 1.0; }
+}
+
+.blink {
+    animation:fade 3000ms infinite;
+    -webkit-animation:fade 3000ms infinite;
+}
+img{
+    width: 150px;
+    height: 200px;
+}
+
+
+table#movie-table{
+    margin-top: 30px;
+}
+td#list-group-item{
+    border-style: double;
+    border-color: #a0fffd;
+    width: 15%;
+    text-align: center;
+    font-size: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    color: #ff9fae;
+
+
+}
+td#post-group-item{
+    border-style: double;
+    border-color: #a0fffd;
+    width: 15%;
+    text-align: center;
+    font-size: 20px;
+}
+td#info-group-item{
+    border-style: double;
+    border-color: #a0fffd;
+    width: 15%;
+    text-align: left;
+    color: #ff9fae;
+    font-size: 20px;
+}
+dl#video-dl {
+    float: left;
+}
+<!--  영화 부분-->
+#event_img{
+    max-width: 100%;
+    width: auto !important;
+      }
+
+dl#movie-dl-1 {
+
+    margin-right: 5px;
+}
+
+
+
+
+#content#img_logo{
+     background-image: url("http://img.cgv.co.kr/WebApp/images/common/logo_1404_new.png");
+}
+
+
+/*                  ================          */
+
+#btn_movie a.off {cursor:default; opacity:0.5;}
+
+
+
+
+
+
+
+
+
+
+
+
+dl#video-dl-1 {
+    float: left;
+    border-style: groove;
+    margin-right: 5px;
+}
+
+
+.quickReserv .menu {
+    width: 100%;
+    overflow: hidden;
+}
+
+.quickReserv .menu > li {
+    float: left;
+    width: 25%;
+    height: 114px;
+    background: url(http://img.cgv.co.kr/webapp/images/reserv/bg_reserv_menu.png);
+    background-size: 50px 114px;
+}
+.quickReserv .menu > li a {
+    display: block;
+    text-align: center;
+    background: url(http://img.cgv.co.kr/webapp/images/reserv/bg_reserv_line.png) repeat-y 100% 0;
+    background-size: 2px 5px;
+}
+
+.quickReserv .menu > li img {
+    width: 80px;
+    height: 114px;
+}
+
+.quickReserv .menu li .none_or_time {
+    background: url(http://img.cgv.co.kr/webapp/images/reserv/bg_reserv_line.png) repeat-y 100% 0;
+    display: block;
+    text-align: center;
+    height: 100%;
+    background-size: 2px 5px;
+}
+
+ul#strTotalul {
+    margin: auto;
+    width: 100%;
+    background-color: #2b2b2b;
+}
+
+img#rescancel {
+    width: 100%;
+    height: 96px;
+}
+
+.quickReserv .menu > li {
+    float: left;
+    width: 25%;
+    height: 114px;
+    background: url(http://img.cgv.co.kr/webapp/images/reserv/bg_reserv_menu.png);
+    background-size: 50px 114px;
+}
+
+
+.quickReserv .reserv_movie .movie_list li a img, .quickReserv .reserv_movie .movie_list li a span {
+    float: left;
+    display: block;
+}
+.quickReserv .reserv_movie .movie_list li a span {
+    width: 80%;
+    padding: 1px 0 0 6px;
+}
+.quickReserv .reserv_movie .movie_list li a {
+    overflow: hidden;
+    display: block;
+    padding: 19px 13px 17px;
+    font-size: 17px;
+    border-top: 1px solid #dad6cb;
+    background: #f6f6f8;
+}
+a:link {
+    color: #9bb6df;
+    text-decoration: none;
+}
+
+
+#quickReserv #reserv_movie #sec_theater dd #select select {
+    width: 95%;
+    padding: 0 40px 0 10px;
+    font-size: 16px;
+    color: #000100;
+    height: 36px;
+    float: left;
+    color: #000100;
+    border-radius: 5px;
+    border: 1px solid #bcbcbc;
+    border-right: 0;
+    background: url(http://img.cgv.co.kr/webapp/images/reserv/select_btn.png) no-repeat 100% -1px, linear-gradient(bottom, rgb(224,224,224) 13%, rgb(255,255,255) 80%);
+    background: url(http://img.cgv.co.kr/webapp/images/reserv/select_btn.png) no-repeat 100% -1px, -o-linear-gradient(bottom, rgb(224,224,224) 13%, rgb(255,255,255) 80%);
+    background: url(http://img.cgv.co.kr/webapp/images/reserv/select_btn.png) no-repeat 100% -1px, -moz-linear-gradient(bottom, rgb(224,224,224) 13%, rgb(255,255,255) 80%);
+    background: url(http://img.cgv.co.kr/webapp/images/reserv/select_btn.png) no-repeat 100% -1px, -webkit-linear-gradient(bottom, rgb(224,224,224) 13%, rgb(255,255,255) 80%);
+    background: url(http://img.cgv.co.kr/webapp/images/reserv/select_btn.png) no-repeat 100% -1px, -ms-linear-gradient(bottom, rgb(224,224,224) 13%, rgb(255,255,255) 80%);
+    background: url(http://img.cgv.co.kr/webapp/images/reserv/select_btn.png) no-repeat 100% -1px,
+    -webkit-gradient(
+            linear,
+            left bottom,
+            left top,
+            color-stop(0.13, rgb(224,224,224)),
+            color-stop(0.8, rgb(255,255,255))
+    );
+    background-size: 34px 36px;
+}
+
+
+dl#select_option dl#select_option1 {
+    padding-top: 58px;
+    margin-left: 38px;
+    font-size: 20px;
+}
+
+
+#btn_area .bigbtn {margin-top:0; margin-right:0; margin-left:6px; width:100%; vertical-align:middle;}
+#btn_area .bigbtn:first-of-type {margin-left:0;}
+.bigbtn {display:inline-block; margin-top:35px; width:100%; border:0; background:#af292e; cursor:pointer;}
+.bigbtn > span {display:block;padding: 12px;font-size:17px;color:#fff;line-height:1.2;}
+ul#movie_list {
+    width: 100%;
+    border-style: groove;
+    padding-bottom: 20px;
+    padding-top: 20px;
+    font-size: 30px;
+    padding-left: 25px;
+}
+span#movie-title-list {
+    padding-left: 20px;
+}
+
+div#btn_area {
+    margin-top: 27px;
+}
+
+
+table#m-list tr td {
+    border-style: double;
+}
+
+
+table#movie-div {
+    margin: 0 auto;
+}
+table#video-table {
+    margin-top: 100px;
+}
+
+
+
+
+
+
+
+table#ticket-Table {
+    margin: 0 auto;
+    margin-top: 49px;
+}
+
+
+
+
+
+
+
+/* navbar  CSS 추가 */
+@import url(https://fonts.googleapis.com/css?family=Poiret+One);
+body{
+    margin:0;
+    padding:0;
+    font-family: 'Helvetica';
+}
+h1, h3{
+    font-family: 'Poiret One', cursive;
+}
+section{
+    width: 90%;
+    padding-left: 20px;
+    margin-right: 20px;
+}
+#navbar{
+    overflow:hidden;
+    width:200px;
+    height:100%;
+    position:fixed;
+    background-color:#FFFFFF;
+    top:0;
+    left:0;
+    z-index:499;
+}
+#primary_nav{
+    position: fixed;
+    display: block;
+    /*top:0px;*/
+    left: -140px;
+    width: 170px;
+    /*height: auto !important;*/
+    background:white;
+    z-index:500;
+}
+#primary_nav ul{
+    display: block;
+    margin-top:80px;
+    padding-left: 5px;
+    list-style: none;
+
+}
+#primary_nav ul li a{
+    display: block;
+    padding:0 0 25px 20px;
+    color: #ffa4a4;
+    font-weight:bold;
+    font-size:15px;
+    text-decoration: none;
+    -webkit-transition: all 0.2s ease;
+    -moz-transition: all 0.2s ease;
+    -o-transition: all 0.2s ease;
+    -ms-transition: all 0.2s ease;
+    transition: all 0.2s ease;
+}
+#primary_nav ul li a:hover, #primary_nav ul li a:active{
+    color: #434244;
+    padding-left:17px;
+    text-decoration: none;
+    -webkit-transition: all 0.2s ease;
+    -moz-transition: all 0.2s ease;
+    -o-transition: all 0.2s ease;
+    -ms-transition: all 0.2s ease;
+    transition: all 0.2s ease;
+}
+#mobile_nav{
+    font-size:36px;
+    position: relative;
+    display: inline-block;
+    top:10px;
+    left:127px;
+    color: #ffa4a4;
+    text-decoration: none;
+    z-index:1000;
+}
+#mobile_nav:hover{
+    color: #ffa4a4;
+}
+
+
+footer{
+    position:absolute;
+    bottom:0;
+    width:100%;
+    height:100px;
+    background:#f1dfb0;
+}
+
+
+.table_header .info {
+    position: absolute;
+    bottom: 20px;
+    right: 0;
+}
+
+
+div#table_header {
+    position: relative;
+    padding-bottom: 20px;
+    margin-left: 40px;
+}
+
+.member_info .msg_desc {
+    margin-top: 10px;
+    color: #888;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+
+
+table#joinTable {
+    margin-left: 40px;
+}
+
+
+
+.ui-datepicker-header.ui-widget-header.ui-helper-clearfix.ui-corner-all {
+    background-color: white;
+}
+
+th#join-name-th {
+    width: 100px;
+}
+input {
+    width: 100%;
+    height: 40px;
+}
+div#table_header {
+    text-align: center;
+}
+
+div#ui-datepicker-div {
+    background-color: white;
+    border-style: groove;
+}
+
+td{
+    width: auto;
+    height: 64px;
+}
+input#phone_input2 {
+    width: 100px;
+}
+input#phone_input3 {
+    width: 100px;
+}
+table#movie-table {
+    width: 80%;
+    margin: 0 auto;
+}
+table#video-table {
+    margin: 0 auto;
+}
+
+input#p2 {
+    width: 100px;
+}
+table#datatable {
+    margin: 0 auto;
+    margin-left: 84px;
+    margin-top: 39px;
+    font-size: 22px;
+}
+
+
+/* 회원가입 테이블 위치 수정*/
+input#name_input {
+    margin-left: 60px;
+}
+input#id_input {
+    margin-left: 46px;
+}input#pass1_input {
+     margin-left: 34px;
+ }input#pass2_input {
+      margin-left: 4px;
+  }input#dat_input {
+       margin-left: 34px;
+   }input#addr_input {
+        margin-left: 62px;
+    }
+
+
+
+
+
+
+
+
+
+
+
+input#addr1 {
+    width: 250px;
+    margin-left: 89px;
+}
+input#addr2 {
+    width: 250px;
+}
+button#addrBtn {
+    width: 100px;
+    height: 30px;
+}
+input#email_input{
+    width: 100px;
+}
+input#email_first {
+width: 100px;
+}
+input#email_first {
+    margin-left: 44px;
+}
+
+select#email_last {
+    height: 40px;
+}
+
+
+
+table#join_table {
+    margin: 0 auto;
+    margin-top: 50px;
+}
+
+
+
+input#phone2{
+    width: 100px;
+
+}
+input#phone3{
+    width: 100px;
+
+}
+select#phone1 {
+    height: 40px;
+    margin-left: 35px;
+}
+input#sample4_postcode {
+     width: 100px;
+    margin-left: 61px;
+ }
+
+input#sample4_roadAddress {
+    width: 200px;
+    margin-left: 88px;
+}
+input#sample4_jibunAddress {
+    width:  200px;
+}
+
+
+
+
+
+/*인증 페이지*/
+th#movie-table-td-poster {
+    width: 150px;
+}
+th#movie-table-td-cinema {
+    width: 150px;
+    text-align: center;
+    font-size: 27px;
+
+}
+
+th#movie-table-td-day {
+    width: 150px;
+    text-align: center;
+    font-size: 19px;
+}
+
+th#movie-table-td-times {
+    font-size: 29px;
+}
+table#movie-table {
+    margin-top: 60px;
+}
+tr#mList {
+    border-bottom-style: groove;
+    border-bottom-color: #b5b5b5;
+}
+img#next {
+    margin-left: 0px;
+    width: 140px;
+    height: 119px;
+}
+th#cg-local {
+    text-align: center;
+    color: rgba(247, 247, 247, 0);
+    font-size: 22px;
+    /* font-family: 궁서체; */
+}
+table#datatable {
+    margin-top: 10px;
+    margin-left: 31px;
+}
+th#movie-table-td-day {
+    color: white;
+}
+a {
+    color: #337ab7;
+    text-decoration: none;
+    font-size: 23px;
+}
+
+th#movie-table-td-cinema {
+    color: white;
+}
+
+th#movie-table-td-times {
+    width: 150px;
+    background: rgb(51, 51, 51);
+    color: white;
+}
+
+th#movie-table-td-times {
+    width: 150px;
+    background: rgb(51, 51, 51);
+    color: white;
+}
+span#okBtn {
+    /* margin-bottom: 963px; */
+    font-size: 25px;
+    color: red;
+    border-bottom-color: red;
+    border-bottom-style: dotted;
+}
+div#StoryDiv {
+    margin-top: 55px;
+    margin-left: 100px;
+    font-size: 19px;
+}
+
+/*구글 맵*/
+
+
+
+#googlemap {
+    max-width:90%;
+    width: 400px;
+    height: 400px;
+    border: 1px solid black;
+    margin: 0 auto;
+}
+div#location {
+    margin: 0 auto;
+    margin-top: 30px;
+    margin-left: 129px;
+    margin-bottom: 30px;
+    font-size: 20px;
+}
+
+body.ui-mobile-viewport.ui-overlay-a {
+    max-width: 100%;
+}img {
+     max-width: 100%;
+ }
